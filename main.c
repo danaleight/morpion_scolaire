@@ -56,7 +56,7 @@ int mainEngine ()
     {
         for (int j = 0 ; j < taille ; j++)
         {
-                morpion[i][j] = ' ';
+            morpion[i][j] = ' ';
         }
     }
 
@@ -82,6 +82,13 @@ int mainEngine ()
         if (morpion[x][y] != ' ')
             printf("\nErreur : case non vide !\n")
     }
+
+    if (joueur == 0)
+        morpion[x][y] = 'X';
+    else if (joueur == 1)
+        morpion[x][y] = 'O';
+    else
+        morpion[x][y] = 'J';
 
 }
 
