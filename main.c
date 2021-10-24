@@ -11,7 +11,7 @@ int main ()
 
 /*  afficher -- ok
     choix utilisateur -- ok
-        -> doit compris taille -1 et 0
+        -> doit etre compris taille -1 et 0
         -> doit se faire sur une case vide
     modifie la table
     victoire
