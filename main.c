@@ -33,67 +33,80 @@ int mainEngine ()
     int nbr_joueur = 0;
 
     int running = 1;
+    int game_running = 1;
 
     while (choix < 1 || choix > 3)
     {
-        printf("Combien de joeur (entre 1 et 3) ? ");
+        printf("Combien de joueur (entre 1 et 3) ? ");
         scanf("%d", &choix);
     }
 
-    char morpion[taille][taille];
-
-    /*if (choix < 3)
+    if (choix < 3)
     { 
         taille = 3;
-        char morpion[3][3];
         nbr_joueur = choix;
     }
         else
     {
         taille = 5;
-        char morpion[5][5];
         nbr_joueur = choix;
-    }*/
-
-    for (int i = 0 ; i < taille ; i++)
-    {
-        for (int j = 0 ; j < taille ; j++)
-        {
-            morpion[i][j] = ' ';
-        }
     }
 
-    afficherTable(taille, morpion, joueur);
+    char morpion[taille][taille];
 
-    do // choix du joueur 
+    while(running)
     {
-        choix = -1;
-        while (choix < 0 || choix > taille - 1)
+        for (int i = 0 ; i < taille ; i++)
         {
-            printf("\nLigne : ");
-            scanf("%d", &choix);
+            for (int j = 0 ; j < taille ; j++)
+            {
+                morpion[i][j] = ' ';
+            }
         }
-        x = choix;
-
-        choix = -1;
-        while (choix < 0 || choix > taille - 1)
+        while (game_running)
         {
-            printf("\nColonne : ");
-            scanf("%d", &choix);
+            afficherTable(taille, morpion, joueur);
+
+            do // choix du joueur 
+            {
+                choix = -1;
+                while (choix < 0 || choix > taille)
+                {
+                    printf("\nLigne : ");
+                    scanf("%d", &choix);
+                }
+                x = choix - 1;
+
+                choix = -1;
+                while (choix < 0 || choix > taille)
+                {
+                    printf("\nColonne : ");
+                    scanf("%d", &choix);
+                }
+                y = choix - 1;
+                if (morpion[x][y] != ' ')
+                    printf("\nErreur : case non vide !\n");
+            }while (morpion[x][y] != ' ');
+
+            if (joueur == 0)
+                morpion[x][y] = 'X';
+            else if (joueur == 1)
+                morpion[x][y] = 'O';
+            else
+                morpion[x][y] = 'J';
+
+            if (victoire(taille, morpion, joueur, x, y)) // test la victoire du joueur actuel
+            {
+                printf("Felicitation le joueur %d a gagne !\n", joueur + 1);
+                game_running = 0;
+            }
+
+            if (joueur != nbr_joueur - 1) // changement de joueur
+                joueur++;
+            else
+                joueur = 0;
         }
-        y = choix;
-        if (morpion[x][y] != ' ')
-            printf("\nErreur : case non vide !\n");
-    }while (morpion[x][y] != ' ');
-
-    if (joueur == 0)
-        morpion[x][y] = 'X';
-    else if (joueur == 1)
-        morpion[x][y] = 'O';
-    else
-        morpion[x][y] = 'J';
-
-    if (victoire(taille, morpion, joueur, x, y))
+    }
 
 }
 
@@ -112,18 +125,24 @@ void afficherTable(int taille, char morpion[][taille], int joueur)
 
             else // toutes les colonnes sauf la derniere
             {
-                printf("%c |", morpion[i][j]);
+                printf("%c | ", morpion[i][j]);
             }
         }
 
         if (i != taille - 1)
         {
-            printf("\n --------- \n");
+            printf("\n");
+            for (int k = 0 ; k < taille * 3 ; k++)
+                printf("-");
+            printf("\n");
         }
 
         else
         {
-            printf("\n\n===========\n");
+            printf("\n\n");
+            for (int k = 0 ; k < taille * 3 ; k++)
+                printf("=");
+            printf("\n");
         }
     }
 }
@@ -131,7 +150,7 @@ void afficherTable(int taille, char morpion[][taille], int joueur)
 int victoire (int taille, char morpion[][taille], int joueur, int i, int j)
 {
     int occurence = 0;
-    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    for (int x = 0 ; x < taille ; x++) //teste sur la ligne
     {
         if (morpion[i][x] != ' ')
         {
@@ -155,21 +174,21 @@ int victoire (int taille, char morpion[][taille], int joueur, int i, int j)
         {return 1;}
 
     occurence = 0;
-    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    for (int x = 0 ; x < taille ; x++) //teste sur la colonne
     {
-        if (morpion[i][x] != ' ')
+        if (morpion[x][j] != ' ')
         {
-            if (joueur == 0 && morpion[i][x] == 'X')
+            if (joueur == 0 && morpion[x][j] == 'X')
             {
                 occurence++;
             }
 
-            else if (joueur == 1 && morpion[i][x] == 'O')
+            else if (joueur == 1 && morpion[x][j] == 'O')
             {
                 occurence++;
             }
 
-            else if (joueur == 2 && morpion[i][x] == 'J')
+            else if (joueur == 2 && morpion[x][j] == 'J')
             {
                 occurence++;
             }
@@ -179,21 +198,21 @@ int victoire (int taille, char morpion[][taille], int joueur, int i, int j)
         {return 1;}
 
     occurence = 0;
-    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    for (int x = 0 ; x < taille ; x++) //teste sur la diagonale haut gauche - bas droit
     {
-        if (morpion[i][x] != ' ')
+        if (morpion[x][x] != ' ')
         {
-            if (joueur == 0 && morpion[i][x] == 'X')
+            if (joueur == 0 && morpion[x][x] == 'X')
             {
                 occurence++;
             }
 
-            else if (joueur == 1 && morpion[i][x] == 'O')
+            else if (joueur == 1 && morpion[x][x] == 'O')
             {
                 occurence++;
             }
 
-            else if (joueur == 2 && morpion[i][x] == 'J')
+            else if (joueur == 2 && morpion[x][x] == 'J')
             {
                 occurence++;
             }
@@ -203,21 +222,21 @@ int victoire (int taille, char morpion[][taille], int joueur, int i, int j)
         {return 1;}
 
     occurence = 0;
-    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    for (int x = 0 ; x < taille ; x++) //teste sur la ligne
     {
-        if (morpion[i][x] != ' ')
+        if (morpion[taille - x - 1][x] != ' ')
         {
-            if (joueur == 0 && morpion[i][x] == 'X')
+            if (joueur == 0 && morpion[taille - x - 1][x] == 'X')
             {
                 occurence++;
             }
 
-            else if (joueur == 1 && morpion[i][x] == 'O')
+            else if (joueur == 1 && morpion[taille - x - 1][x] == 'O')
             {
                 occurence++;
             }
 
-            else if (joueur == 2 && morpion[i][x] == 'J')
+            else if (joueur == 2 && morpion[taille - x - 1][x] == 'J')
             {
                 occurence++;
             }
