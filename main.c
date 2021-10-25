@@ -3,17 +3,18 @@
 
 int mainEngine ();
 void afficherTable(int taille, char morpion[][taille], int joueur);
+int victoire (int taille, char morpion[][taille], int joueur, int i, int j);
 
 int main () 
 {
-    
+    mainEngine ();
 }
 
 /*  afficher -- ok
     choix utilisateur -- ok
         -> doit etre compris taille -1 et 0
         -> doit se faire sur une case vide
-    modifie la table
+    modifie la table -- OK
     victoire
         -> si oui
             afficher la grille
@@ -39,7 +40,9 @@ int mainEngine ()
         scanf("%d", &choix);
     }
 
-    if (choix < 3)
+    char morpion[taille][taille];
+
+    /*if (choix < 3)
     { 
         taille = 3;
         char morpion[3][3];
@@ -50,7 +53,7 @@ int mainEngine ()
         taille = 5;
         char morpion[5][5];
         nbr_joueur = choix;
-    }
+    }*/
 
     for (int i = 0 ; i < taille ; i++)
     {
@@ -62,7 +65,7 @@ int mainEngine ()
 
     afficherTable(taille, morpion, joueur);
 
-    while (morpion[x][y] != ' ')
+    do // choix du joueur 
     {
         choix = -1;
         while (choix < 0 || choix > taille - 1)
@@ -76,12 +79,12 @@ int mainEngine ()
         while (choix < 0 || choix > taille - 1)
         {
             printf("\nColonne : ");
-            scanf("%d", &choix)
+            scanf("%d", &choix);
         }
         y = choix;
         if (morpion[x][y] != ' ')
-            printf("\nErreur : case non vide !\n")
-    }
+            printf("\nErreur : case non vide !\n");
+    }while (morpion[x][y] != ' ');
 
     if (joueur == 0)
         morpion[x][y] = 'X';
@@ -89,6 +92,8 @@ int mainEngine ()
         morpion[x][y] = 'O';
     else
         morpion[x][y] = 'J';
+
+    if (victoire(taille, morpion, joueur, x, y))
 
 }
 
@@ -123,3 +128,103 @@ void afficherTable(int taille, char morpion[][taille], int joueur)
     }
 }
 
+int victoire (int taille, char morpion[][taille], int joueur, int i, int j)
+{
+    int occurence = 0;
+    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    {
+        if (morpion[i][x] != ' ')
+        {
+            if (joueur == 0 && morpion[i][x] == 'X')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 1 && morpion[i][x] == 'O')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 2 && morpion[i][x] == 'J')
+            {
+                occurence++;
+            }
+        }
+    }
+    if (occurence == taille)
+        {return 1;}
+
+    occurence = 0;
+    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    {
+        if (morpion[i][x] != ' ')
+        {
+            if (joueur == 0 && morpion[i][x] == 'X')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 1 && morpion[i][x] == 'O')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 2 && morpion[i][x] == 'J')
+            {
+                occurence++;
+            }
+        }
+    }
+    if (occurence == taille)
+        {return 1;}
+
+    occurence = 0;
+    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    {
+        if (morpion[i][x] != ' ')
+        {
+            if (joueur == 0 && morpion[i][x] == 'X')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 1 && morpion[i][x] == 'O')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 2 && morpion[i][x] == 'J')
+            {
+                occurence++;
+            }
+        }
+    }
+    if (occurence == taille)
+        {return 1;}
+
+    occurence = 0;
+    for (int x = 0 ; i < taille ; i++) //teste sur la ligne
+    {
+        if (morpion[i][x] != ' ')
+        {
+            if (joueur == 0 && morpion[i][x] == 'X')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 1 && morpion[i][x] == 'O')
+            {
+                occurence++;
+            }
+
+            else if (joueur == 2 && morpion[i][x] == 'J')
+            {
+                occurence++;
+            }
+        }
+    }
+    if (occurence == taille)
+        {return 1;}
+
+    return 0;
+}
