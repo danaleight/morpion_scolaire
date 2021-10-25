@@ -31,13 +31,14 @@ int mainEngine ()
     int taille = 0;
     int joueur = 0;
     int nbr_joueur = 0;
+    int nbr_coup = 0;
 
     int running = 1;
     int game_running = 1;
 
     while (choix < 1 || choix > 3)
     {
-        printf("Combien de joueur (entre 1 et 3) ? ");
+        printf("Combien de joueur (entre 2 et 3) ? ");
         scanf("%d", &choix);
     }
 
@@ -88,6 +89,8 @@ int mainEngine ()
                     printf("\nErreur : case non vide !\n");
             }while (morpion[x][y] != ' ');
 
+            nbr_coup++;
+
             if (joueur == 0)
                 morpion[x][y] = 'X';
             else if (joueur == 1)
@@ -101,10 +104,28 @@ int mainEngine ()
                 game_running = 0;
             }
 
+            if (nbr_coup == taille * taille)
+            {
+                printf("Egalite !\n");
+                game_running = 0;
+            }
+
             if (joueur != nbr_joueur - 1) // changement de joueur
                 joueur++;
             else
                 joueur = 0;
+        }
+
+        printf("Voulez-vous rejouer ? (1 pour oui, 0 pour non)");
+        scanf("%d", &choix);
+
+        if(choix == 0)
+            running = 0;
+        else
+        {
+            game_running = 1;
+            nbr_coup = 0;
+            joueur = 0;
         }
     }
 
